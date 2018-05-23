@@ -1,14 +1,29 @@
+<?php
+session_start();
 
 
-	<form action="fruit.php" method="get">
-		<fieldset>
-			<legend>Identification</legend>
-		
-					<label for="mail"></label>
-					<input type="text" name="mail" value="Adresse Mail"></br>
-					<label for="password"></label>
-					<input type="text" name="word" value="Password"></br>
+$bdd = new PDO('mysql:host=localhost;dbname=banana_store;charset=utf8', 'root', 'troiswa');
 
-					<input type="submit" name="submit" value="recherche">
-					</fieldset>
-	</form>
+
+$mail = $_POST['mail'];
+$password = $_POST['password'];
+	
+$sql ="SELECT * FROM user WHERE email LIKE '$mail' AND password LIKE '$password'";
+
+
+$statement = $bdd->prepare($sql);
+$statement->execute();
+$user = $statement->fetch(\PDO::FETCH_ASSOC);
+
+if ($user == null) {
+	
+	echo "identifiant ou mot de passe incorrect";
+} else {
+
+	$_SESSION['iduser'] = $user['id'];
+
+	// echo "Bienvenue {$user['firstname']}";	
+
+	header('Location: home.php');
+}
+

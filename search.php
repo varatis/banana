@@ -1,6 +1,9 @@
 
 <?php
 
+session_start();
+
+
 $bdd = new PDO('mysql:host=localhost;dbname=banana_store;charset=utf8', 'root', 'troiswa');
 
 if (isset($_GET['word'])) {
@@ -17,6 +20,27 @@ if (isset($_GET['word'])) {
 
 $reponse = $bdd->query($sql);
 
+
+
+// JE REPREND L ID DE USER POUR AFFICHER LE MESSAGE SUR LA PAGE -- VOIR REGISTER.PHP
+if (isset($_SESSION['iduser'])) {
+				
+				$iduser = $_SESSION['iduser'];
+				// print_r($iduser);
+				
+				$bdd = new PDO('mysql:host=localhost;dbname=banana_store;charset=utf8', 'root', 'troiswa');
+				$sql = "SELECT * FROM user WHERE id=$iduser";					
+
+				$statement = $bdd->prepare($sql);
+				$statement->execute();
+				$user = $statement->fetch(\PDO::FETCH_ASSOC);
+
+				// print_r($user);
+
+
+				echo 'Voila votre demande' . " " . $user['firstname'] . "</br>";
+
+}
 
 foreach ($reponse as $donnees) { 
 

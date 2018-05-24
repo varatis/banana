@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<title>Document</title>
+	</head>
+	<body>
+		<header>
+			<h1>La Boutique du Fruit</h1>
+			<ul>
+				<li><a href="home.php">Accueil</a></li>
+				<li><a href="search.php">Recherche</a></li>
+				<li><a href="panier.php">mon panier</a></li>
+			</ul>
+
+			<?php
+				//print_r($_SESSION);
+			if (isset($_SESSION['iduser'])) {
+				$iduser = $_SESSION['iduser'];
+
+				// print_r($iduser);
+
+
+				$bdd = new PDO('mysql:host=localhost;dbname=banana_store;charset=utf8', 'root', 'troiswa');
+				$sql = "SELECT * FROM user WHERE id=$iduser";					
+
+				$statement = $bdd->prepare($sql);
+				$statement->execute();
+				$user = $statement->fetch(\PDO::FETCH_ASSOC);
+
+				// print_r($user);
+
+				echo 'Bienvenue' . " " . $user['firstname'] . ' ' . $user['lastname'] . '<img src="' . $user['photo'] . '" />';
+
+			} else {
+
+
+
+				echo "je ne suis pas connecté";	
+
+			
+			}
+			?>
+
+			<form action="register.php" method="post">
+					<fieldset>
+						<legend>Identification</legend>
+					
+								<label for="mail"></label>
+								<input type="text" name="mail" value="Adresse Mail"></br>
+								<label for="password"></label>
+								<input type="password" name="password" value="Password"></br>
+
+								<input type="submit" name="submit" value="recherche">
+								</fieldset>
+			</form>
+
+			<form action="search.php" method="get">
+				<label for="fruit">Recherche du fruit</label>
+				<input type="text" name="word"></br>
+				<input type="submit" name="submit" value="recherche">
+			</form>
+		</header>
